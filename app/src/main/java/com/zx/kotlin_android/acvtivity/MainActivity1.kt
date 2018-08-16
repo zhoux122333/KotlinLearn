@@ -1,17 +1,19 @@
 package com.zx.kotlin_android.acvtivity
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
-import android.widget.Toast
 import com.zx.kotlin_android.R
 import com.zx.kotlin_android.adapter.RecyclerAdapter
-import com.zx.kotlin_android.http.Request
-import org.jetbrains.anko.*
+import com.zx.kotlin_android.domain.RequestForecastCommand
+import com.zx.kotlin_android.domain.model.Forecast
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.toast
+import org.jetbrains.anko.uiThread
 
-class MainActivity1 : AppCompatActivity() {
+class MainActivity : AppCompatActivity()  {
     private val items = listOf<String>(
             "Mon 6/23 - Sunny - 31/17",
             "Tue 6/24 - Sunny - 32/15",
@@ -28,12 +30,20 @@ class MainActivity1 : AppCompatActivity() {
 
         val recyclerView = findViewById<RecyclerView>(R.id.rv)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = RecyclerAdapter(items)
-        toast("Anko")
+//        recyclerView.adapter = RecyclerAdapter(items)
+//        toast("Anko")
         doAsync {
             Log.d(javaClass.simpleName,"logAsync")
-            Request("https://www.baidu.com").run()
-            uiThread { longToast("Request performed") }
+
+            val result = RequestForecastCommand("94043").execute()
+//            Request("https://www.baidu.com").run()
+            uiThread {
+                recyclerView.adapter = RecyclerAdapter(result,object: RecyclerAdapter.OnItemClickListener{
+                    override fun invoke(forecast: Forecast) {
+                        toast(forecast.date)
+                    }
+                })
+            }
         }
     }
 

@@ -38,17 +38,12 @@ class MainActivity : AppCompatActivity()  {
             val result = RequestForecastCommand("94043").execute()
 //            Request("https://www.baidu.com").run()
             uiThread {
-                recyclerView.adapter = RecyclerAdapter(result,object: RecyclerAdapter.OnItemClickListener{
-                    override fun invoke(forecast: Forecast) {
-                        toast(forecast.date)
-                    }
-                })
+//                recyclerView.adapter = RecyclerAdapter(result) { forecast -> toast(forecast.date)}
+                recyclerView.adapter = RecyclerAdapter(result) { toast(it.date)}
+
             }
         }
     }
-
-
-
 //
 //    fun toast(message: String, length: Int = Toast.LENGTH_SHORT){
 //        Toast.makeText(this,message,length).show()

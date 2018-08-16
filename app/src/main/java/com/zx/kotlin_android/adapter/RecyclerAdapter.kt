@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.item_forecast.view.*
 import org.jetbrains.anko.find
 import kotlin.math.max
 
-class RecyclerAdapter(val weekForecast: ForecastList,val itemClick: OnItemClickListener): RecyclerView.Adapter<RecyclerAdapter.ViewHolder>(){
+class RecyclerAdapter(val weekForecast: ForecastList,val itemClick: (Forecast) -> Unit): RecyclerView.Adapter<RecyclerAdapter.ViewHolder>(){
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ViewHolder {
         val view = LayoutInflater.from(p0.context)
                 .inflate(R.layout.item_forecast,p0,false)
@@ -32,13 +32,12 @@ class RecyclerAdapter(val weekForecast: ForecastList,val itemClick: OnItemClickL
 //        p0.textView.text = items[p1]
       p0.bindForecast(weekForecast[p1])
     }
-    class ViewHolder(view: View, val itemClick: OnItemClickListener) : RecyclerView.ViewHolder(view){
+    class ViewHolder(view: View, val itemClick: (Forecast) -> Unit) : RecyclerView.ViewHolder(view){
         private val iconView: ImageView
         private val dateView: TextView
         private val descriptionView: TextView
         private val maxTemperatureView: TextView
         private val minTemperatureView: TextView
-
         init {
             iconView = view.find(R.id.icon)
             dateView = view.find(R.id.date)
@@ -46,7 +45,6 @@ class RecyclerAdapter(val weekForecast: ForecastList,val itemClick: OnItemClickL
             maxTemperatureView = view.find(R.id.maxTemperature)
             minTemperatureView = view.find(R.id.minTemperature)
         }
-
         fun bindForecast(forecast: Forecast){
             with(forecast){
                 Picasso.with(itemView.context).load(icon).into(iconView)
@@ -58,8 +56,11 @@ class RecyclerAdapter(val weekForecast: ForecastList,val itemClick: OnItemClickL
             }
         }
     }
-    interface OnItemClickListener{
-        operator fun invoke(forecast: Forecast)
-    }
+    /**
+     * 使用lambda代替
+     */
+//    interface OnItemClickListener{
+//        operator fun invoke(forecast: Forecast)
+//    }
 
 }

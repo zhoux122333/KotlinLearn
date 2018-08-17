@@ -5,25 +5,31 @@ import com.zx.kotlin_android.domain.model.ForecastList
 import com.zx.kotlin_android.data.ForecastResult
 import java.text.DateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 import com.zx.kotlin_android.domain.model.Forecast as ModelForecast
 
 class ForecastDataMapper {
     fun converFromDataModel(forecast: ForecastResult): ForecastList {
-        return ForecastList(forecast.city.name, forecast.city.country,
+        return ForecastList(forecast.city.id, forecast.city.name, forecast.city.country,
                 convertForecastListToDomain(forecast.list))
     }
 
     private fun convertForecastListToDomain(list: List<Forecast>): List<ModelForecast> {
-        return list.map { convertForecastListToDomain(it) }
+//        return list.map { convertForecastListToDomain(it) }
+        return list.mapIndexed { index, forecast ->
+            val dt = Calendar.getInstance().timeInMillis+ TimeUnit.DAYS.toMillis(index.toLong())
+            convertForecastListToDomain(forecast.copy(dt = dt))
+        }
     }
-    private fun convertForecastListToDomain(forecast: Forecast):ModelForecast{
-        return ModelForecast(convertDate(forecast.dt),forecast.weather[0].description,forecast.temp.max.toInt(),
+    private fun convertForecastListToDomain(forecast: Forecast) = with(forecast){
+      ModelForecast(-1,dt,forecast.weather[0].description,forecast.temp.max.toInt(),
                 forecast.temp.min.toInt(),generateIconUrl(forecast.weather[0].icon))
     }
 
-    private fun convertDate(date: Long): String {
-        val df = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault())
-        return df.format(date*1000)
+    private fun convertDate(date: Long): Long{
+//        val df = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault())
+        val dt = Calendar.getInstance().timeInMillis + TimeUnit.DAYS.toMillis(date)
+        return dt
 
     }
 

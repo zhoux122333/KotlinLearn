@@ -13,6 +13,8 @@ import com.zx.kotlin_android.domain.model.Forecast
 import com.zx.kotlin_android.domain.model.ForecastList
 import kotlinx.android.synthetic.main.item_forecast.view.*
 import org.jetbrains.anko.find
+import java.text.DateFormat
+import java.util.*
 import kotlin.math.max
 
 class RecyclerAdapter(val weekForecast: ForecastList,val itemClick: (Forecast) -> Unit): RecyclerView.Adapter<RecyclerAdapter.ViewHolder>(){
@@ -48,14 +50,22 @@ class RecyclerAdapter(val weekForecast: ForecastList,val itemClick: (Forecast) -
         fun bindForecast(forecast: Forecast){
             with(forecast){
                 Picasso.with(itemView.context).load(icon).into(itemView.icon)
-                itemView.date.text = date
+                itemView.date.text = date.toDateString()
                 itemView.description.text = description
                 itemView.maxTemperature.text = "${high.toString()}"
                 itemView.minTemperature.text = "${low.toString()}"
                 itemView.setOnClickListener { itemClick(forecast) }
             }
         }
+
+        fun Long.toDateString(dateFormat: Int = DateFormat.MEDIUM): String {
+            val df = DateFormat.getDateInstance(dateFormat, Locale.getDefault())
+            return df.format(this)
+        }
     }
+
+
+
     /**
      * 使用lambda代替
      */

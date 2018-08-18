@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 //            Request("https://www.baidu.com").run()
             uiThread {
                 //                recyclerView.adapter = RecyclerAdapter(result) { forecast -> toast(forecast.date)}
-                rv.adapter = RecyclerAdapter(result) { toast(it.date) }
+                rv.adapter = RecyclerAdapter(result) { toast(it.date.toString()) }
 
             }
         }

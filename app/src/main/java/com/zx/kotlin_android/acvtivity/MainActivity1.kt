@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         doAsync {
             Log.d(javaClass.simpleName, "logAsync")
 
-            val result = RequestForecastCommand("94043").execute()
+            val result = RequestForecastCommand(94043).execute()
 //            Request("https://www.baidu.com").run()
             uiThread {
                 //                recyclerView.adapter = RecyclerAdapter(result) { forecast -> toast(forecast.date)}

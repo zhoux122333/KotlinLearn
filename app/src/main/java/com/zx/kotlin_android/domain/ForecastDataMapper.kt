@@ -9,8 +9,8 @@ import java.util.concurrent.TimeUnit
 import com.zx.kotlin_android.domain.model.Forecast as ModelForecast
 
 class ForecastDataMapper {
-    fun converFromDataModel(forecast: ForecastResult): ForecastList {
-        return ForecastList(forecast.city.id, forecast.city.name, forecast.city.country,
+    fun converFromDataModel(zipCode: Long,forecast: ForecastResult): ForecastList {
+        return ForecastList(zipCode, forecast.city.name, forecast.city.country,
                 convertForecastListToDomain(forecast.list))
     }
 
